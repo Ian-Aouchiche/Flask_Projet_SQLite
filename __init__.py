@@ -47,6 +47,11 @@ def afficher_stock():
 
     return render_template('stock.html', stock=stock_data)
 
+@app.route('/test')
+def test():
+    return "Flask fonctionne correctement !"
+
+
 
 @app.route('/gestion_utilisateurs', methods=['GET', 'POST'])
 def gestion_utilisateurs():
