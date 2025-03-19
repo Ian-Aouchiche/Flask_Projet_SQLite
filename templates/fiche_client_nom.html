@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiche Client</title>
+    <title>Rechercher un Client</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,14 +39,25 @@
 </head>
 <body>
     <div class="container">
-        <h2>Fiche Client</h2>
-        <p><strong>ID :</strong> {{ client[0] }}</p>
-        <p><strong>Nom :</strong> {{ client[2] }}</p>
-        <p><strong>Prénom :</strong> {{ client[3] }}</p>
-        <p><strong>Adresse :</strong> {{ client[4] }}</p>
-        <p><strong>Date de Création :</strong> {{ client[1] }}</p>
+        <h2>Rechercher un Client</h2>
+        <form method="POST">
+            <label for="nom">Nom du client :</label>
+            <input type="text" id="nom" name="nom" required>
+            <button type="submit">Rechercher</button>
+        </form>
 
-        <a href="/consultation/" class="btn">Retour</a>
+        {% if client %}
+            <h3>Fiche Client</h3>
+            <p><strong>ID :</strong> {{ client[0] }}</p>
+            <p><strong>Nom :</strong> {{ client[2] }}</p>
+            <p><strong>Prénom :</strong> {{ client[3] }}</p>
+            <p><strong>Adresse :</strong> {{ client[4] }}</p>
+            <p><strong>Date de Création :</strong> {{ client[1] }}</p>
+        {% elif client is none and request.method == 'POST' %}
+            <p style="color: red;">Client non trouvé.</p>
+        {% endif %}
+        
+        <a href="/" class="btn">Retour</a>
     </div>
 </body>
 </html>

@@ -77,20 +77,23 @@ def enregistrer_client():
     conn.close()
     return redirect('/consultation/')  # Rediriger vers la page d'accueil après l'enregistrement
 
-@app.route('/fiche_client/<int:client_id>')
-def fiche_client(client_id):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
+@app.route('/fiche_client_nom', methods=['GET', 'POST'])
+def fiche_client_nom():
+    client = None
 
-    # Récupérer les informations du client à partir de son ID
-    cursor.execute('SELECT * FROM clients WHERE id = ?', (client_id,))
-    client = cursor.fetchone()
-    conn.close()
+    if request.method == 'POST':
+        nom = request.form['nom']
 
-    if client:
-        return render_template('fiche_client.html', client=client)
-    else:
-        return "Client non trouvé", 404
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        # Rechercher le client par son nom (on prend le premier trouvé)
+        cursor.execute('SELECT * FROM clients WHERE nom = ? LIMIT 1', (nom,))
+        client = cursor.fetchone()
+        conn.close()
+
+    return render_template('fiche_client_nom.html', client=client)
+
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True)
