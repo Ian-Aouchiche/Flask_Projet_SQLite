@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Fiche Client</h2>
+        <p><strong>ID :</strong> {{ client[0] }}</p>
+        <p><strong>Nom :</strong> {{ client[2] }}</p>
+        <p><strong>Prénom :</strong> {{ client[3] }}</p>
+        <p><strong>Adresse :</strong> {{ client[4] }}</p>
+        <p><strong>Date de Création :</strong> {{ client[1] }}</p>
+
+        <a href="/consultation/" class="btn">Retour</a>
+    </div>
+</body>
+</html>
