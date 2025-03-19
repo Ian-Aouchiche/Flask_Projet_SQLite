@@ -55,40 +55,23 @@ def test():
 
 @app.route('/gestion_utilisateurs', methods=['GET', 'POST'])
 def gestion_utilisateurs():
+    print("➡️ Route /gestion_utilisateurs appelée")  # Debug
+
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     if request.method == 'POST':
         action = request.form.get('action')
-
-        if action == "Ajouter":
-            nom = request.form['nom']
-            email = request.form['email']
-            mot_de_passe = request.form['mot_de_passe']
-            role_id = request.form['role_id']
-            cursor.execute("INSERT INTO Users (nom, email, mot_de_passe, role_id) VALUES (?, ?, ?, ?)", 
-                           (nom, email, mot_de_passe, role_id))
-            conn.commit()
-
-        elif action == "Supprimer":
-            user_id = request.form['user_id']
-            cursor.execute("DELETE FROM Users WHERE id = ?", (user_id,))
-            conn.commit()
-
-        elif action == "Modifier":
-            user_id = request.form['user_id']
-            nom = request.form['nom']
-            email = request.form['email']
-            role_id = request.form['role_id']
-            cursor.execute("UPDATE Users SET nom = ?, email = ?, role_id = ? WHERE id = ?", 
-                           (nom, email, role_id, user_id))
-            conn.commit()
+        print(f"📌 Action reçue : {action}")  # Debug
 
     cursor.execute("SELECT Users.id, Users.nom, Users.email, Roles.nom_role FROM Users JOIN Roles ON Users.role_id = Roles.id")
     users = cursor.fetchall()
-    conn.close()
 
+    print(f"📌 Utilisateurs récupérés : {users}")  # Debug
+
+    conn.close()
     return render_template('gestion_utilisateurs.html', users=users)
+
 
 
 if __name__ == "__main__":
