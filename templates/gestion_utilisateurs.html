@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Utilisateurs</title>
+</head>
+<body>
+
+    <h1>Gestion des Utilisateurs</h1>
+
+    <h2>Liste des Utilisateurs</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2] }}</td>
+            <td>{{ user[3] }}</td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="user_id" value="{{ user[0] }}">
+                    <button type="submit" name="action" value="Supprimer">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Ajouter un Utilisateur</h2>
+    <form method="POST">
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="mot_de_passe" placeholder="Mot de passe" required>
+        <select name="role_id">
+            <option value="1">Admin</option>
+            <option value="2">Utilisateur</option>
+        </select>
+        <button type="submit" name="action" value="Ajouter">Ajouter</button>
+    </form>
+
+    <h2>Modifier un Utilisateur</h2>
+    <form method="POST">
+        <input type="text" name="user_id" placeholder="ID de l'utilisateur" required>
+        <input type="text" name="nom" placeholder="Nom">
+        <input type="email" name="email" placeholder="Email">
+        <select name="role_id">
+            <option value="1">Admin</option>
+            <option value="2">Utilisateur</option>
+        </select>
+        <button type="submit" name="action" value="Modifier">Modifier</button>
+    </form>
+
+</body>
+</html>
