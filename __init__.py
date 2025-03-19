@@ -8,9 +8,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 def est_authentifie():
     return session.get('authentifie')
 
-@app.route('/')
-def accueil():
-    return render_template('hello.html')
 
 @app.route('/lecture')
 def lecture():
@@ -50,6 +47,11 @@ def afficher_stock():
 @app.route('/test')
 def test():
     return "Flask fonctionne correctement !"
+
+@app.route('/')
+def accueil():
+    return render_template('accueil.html')
+
 
 
 
