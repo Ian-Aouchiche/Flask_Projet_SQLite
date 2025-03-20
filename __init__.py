@@ -1,4 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, flash
+
 import sqlite3
 
 app = Flask(__name__)                                                                                                                  
@@ -6,13 +8,37 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
 
 
-# Nouvelle route pour afficher le stock des livres
-@app.route('/stock')
+# Route Stock avec ajout et suppression
+@app.route('/stock', methods=['GET', 'POST'])
 def afficher_stock():
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Exécuter la requête SQL pour récupérer les stocks de livres
+    # Ajouter un livre
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == "Ajouter":
+            titre = request.form['titre']
+            auteur = request.form['auteur']
+            quantite = request.form['quantite']
+            emplacement = request.form['emplacement']
+            
+            cursor.execute("INSERT INTO Books (titre, auteur) VALUES (?, ?)", (titre, auteur))
+            livre_id = cursor.lastrowid  # Récupère l'ID du livre ajouté
+            cursor.execute("INSERT INTO Stocks (livre_id, quantite, emplacement) VALUES (?, ?, ?)", (livre_id, quantite, emplacement))
+            
+            conn.commit()
+            flash("📦 Livre ajouté avec succès !", "success")
+
+        elif action == "Supprimer":
+            livre_id = request.form['livre_id']
+            cursor.execute("DELETE FROM Stocks WHERE livre_id = ?", (livre_id,))
+            cursor.execute("DELETE FROM Books WHERE id = ?", (livre_id,))
+            
+            conn.commit()
+            flash("❌ Livre supprimé avec succès !", "danger")
+
+    # Récupérer les livres
     cursor.execute('''
         SELECT Books.id, Books.titre, Books.auteur, Stocks.quantite, Stocks.emplacement
         FROM Books
@@ -23,6 +49,7 @@ def afficher_stock():
     conn.close()
 
     return render_template('stock.html', stock=stock_data)
+
 
 @app.route('/test')
 def test():
