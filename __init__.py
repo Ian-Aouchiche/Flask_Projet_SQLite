@@ -1,40 +1,22 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask import Flask, render_template, request, redirect, url_for, flash
-
 import sqlite3
 
 app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
-
-
-# Route Stock avec ajout et suppression
+# Route Stock avec suppression
 @app.route('/stock', methods=['GET', 'POST'])
 def afficher_stock():
-    conn = get_db_connection()
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
-    # Ajouter un livre
+    # Vérifier si une suppression est demandée
     if request.method == 'POST':
         action = request.form.get('action')
-        if action == "Ajouter":
-            titre = request.form['titre']
-            auteur = request.form['auteur']
-            quantite = request.form['quantite']
-            emplacement = request.form['emplacement']
-            
-            cursor.execute("INSERT INTO Books (titre, auteur) VALUES (?, ?)", (titre, auteur))
-            livre_id = cursor.lastrowid  # Récupère l'ID du livre ajouté
-            cursor.execute("INSERT INTO Stocks (livre_id, quantite, emplacement) VALUES (?, ?, ?)", (livre_id, quantite, emplacement))
-            
-            conn.commit()
-            flash("📦 Livre ajouté avec succès !", "success")
-
-        elif action == "Supprimer":
+        if action == "Supprimer":
             livre_id = request.form['livre_id']
             cursor.execute("DELETE FROM Stocks WHERE livre_id = ?", (livre_id,))
             cursor.execute("DELETE FROM Books WHERE id = ?", (livre_id,))
-            
             conn.commit()
             flash("❌ Livre supprimé avec succès !", "danger")
 

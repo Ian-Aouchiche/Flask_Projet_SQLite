@@ -1,0 +1,31 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.alert {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btn-danger {
+    transition: 0.3s ease-in-out;
+}
+
+.btn-danger:hover {
+    background-color: #dc3545;
+    opacity: 0.8;
+}
