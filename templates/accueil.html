@@ -5,6 +5,14 @@
 {% block body_class %}accueil{% endblock %}  <!-- Ajout de la classe ici -->
 
 {% block content %}
+
+<style>
+    body.accueil {
+        background: url("{{ url_for('static', filename='images/image.jpg') }}") no-repeat center center fixed;
+        background-size: cover;
+    }
+</style>
+
 <div class="overlay">
     <h1 class="mt-5">Bienvenue dans la Bibliothèque</h1>
     <p class="lead">Gérez les stocks de livres et les utilisateurs depuis cette interface.</p>
