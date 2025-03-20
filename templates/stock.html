@@ -23,20 +23,32 @@
     <h2 class="my-3">➕ Ajouter un Livre</h2>
     <form method="POST" class="p-3 border rounded bg-light">
         <div class="mb-3">
-            <label for="titre" class="form-label">Titre</label>
-            <input type="text" class="form-control" name="titre" id="titre" placeholder="Titre du livre" required>
+            <label class="form-label">Titre</label>
+            <input type="text" class="form-control" name="titre" required>
         </div>
         <div class="mb-3">
-            <label for="auteur" class="form-label">Auteur</label>
-            <input type="text" class="form-control" name="auteur" id="auteur" placeholder="Auteur" required>
+            <label class="form-label">Auteur</label>
+            <input type="text" class="form-control" name="auteur" required>
         </div>
         <div class="mb-3">
-            <label for="quantite" class="form-label">Quantité</label>
-            <input type="number" class="form-control" name="quantite" id="quantite" placeholder="Quantité disponible" required>
+            <label class="form-label">Année de Publication</label>
+            <input type="number" class="form-control" name="annee_publication">
         </div>
         <div class="mb-3">
-            <label for="emplacement" class="form-label">Emplacement</label>
-            <input type="text" class="form-control" name="emplacement" id="emplacement" placeholder="Emplacement du livre" required>
+            <label class="form-label">Genre</label>
+            <input type="text" class="form-control" name="genre">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ISBN</label>
+            <input type="text" class="form-control" name="isbn" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Quantité</label>
+            <input type="number" class="form-control" name="quantite" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Emplacement</label>
+            <input type="text" class="form-control" name="emplacement">
         </div>
         <button type="submit" class="btn btn-primary" name="action" value="Ajouter">📌 Ajouter</button>
     </form>
@@ -49,6 +61,9 @@
                 <th>ID</th>
                 <th>Titre</th>
                 <th>Auteur</th>
+                <th>Année</th>
+                <th>Genre</th>
+                <th>ISBN</th>
                 <th>Quantité</th>
                 <th>Emplacement</th>
                 <th>Actions</th>
@@ -62,6 +77,9 @@
                 <td>{{ livre[2] }}</td>
                 <td>{{ livre[3] }}</td>
                 <td>{{ livre[4] }}</td>
+                <td>{{ livre[5] }}</td>
+                <td>{{ livre[6] }}</td>
+                <td>{{ livre[7] }}</td>
                 <td>
                     <form method="POST" class="d-inline">
                         <input type="hidden" name="livre_id" value="{{ livre[0] }}">
