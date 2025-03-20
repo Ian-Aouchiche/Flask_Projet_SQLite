@@ -4,16 +4,32 @@ import sqlite3
 app = Flask(__name__)                                                                                                                  
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 
-# Route Stock avec suppression
 @app.route('/stock', methods=['GET', 'POST'])
 def afficher_stock():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
-    # Vérifier si une suppression est demandée
+    # Vérifier si une action est demandée
     if request.method == 'POST':
         action = request.form.get('action')
-        if action == "Supprimer":
+
+        # Ajout d'un livre
+        if action == "Ajouter":
+            titre = request.form['titre']
+            auteur = request.form['auteur']
+            quantite = request.form['quantite']
+            emplacement = request.form['emplacement']
+
+            # Ajouter le livre dans la base de données
+            cursor.execute("INSERT INTO Books (titre, auteur) VALUES (?, ?)", (titre, auteur))
+            livre_id = cursor.lastrowid  # Récupère l'ID du livre ajouté
+            cursor.execute("INSERT INTO Stocks (livre_id, quantite, emplacement) VALUES (?, ?, ?)", (livre_id, quantite, emplacement))
+            
+            conn.commit()
+            flash("📚 Livre ajouté avec succès !", "success")
+
+        # Suppression d'un livre
+        elif action == "Supprimer":
             livre_id = request.form['livre_id']
             cursor.execute("DELETE FROM Stocks WHERE livre_id = ?", (livre_id,))
             cursor.execute("DELETE FROM Books WHERE id = ?", (livre_id,))
@@ -31,6 +47,7 @@ def afficher_stock():
     conn.close()
 
     return render_template('stock.html', stock=stock_data)
+
 
 
 @app.route('/test')
@@ -96,7 +113,6 @@ def gestion_utilisateurs():
 
     conn.close()
     return render_template('gestion_utilisateurs.html', users=users)
-
 
 
 

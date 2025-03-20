@@ -1,26 +1,48 @@
+/* Style général */
 body {
     background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
 }
 
-h1 {
+/* Titres */
+h1, h2 {
     text-align: center;
     font-weight: bold;
+    margin-bottom: 20px;
+    color: #343a40;
 }
 
+/* Conteneur */
 .container {
     max-width: 900px;
     margin: auto;
 }
 
+/* Table du stock */
 .table {
     margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+.table th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+}
+
+/* Messages flash */
 .alert {
     text-align: center;
     font-size: 1rem;
+    margin-top: 10px;
 }
 
+/* Boutons */
 .btn-danger {
     transition: 0.3s ease-in-out;
 }
@@ -28,4 +50,38 @@ h1 {
 .btn-danger:hover {
     background-color: #dc3545;
     opacity: 0.8;
+}
+
+/* Formulaire d'ajout de livre */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+form input, form select {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+form button {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+    form button {
+        width: auto;
+    }
 }
