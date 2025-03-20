@@ -9,36 +9,69 @@ def afficher_stock():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
-    # Vérifier si une action est demandée
     if request.method == 'POST':
         action = request.form.get('action')
 
-        # Ajout d'un livre
         if action == "Ajouter":
-            titre = request.form['titre']
-            auteur = request.form['auteur']
-            quantite = request.form['quantite']
-            emplacement = request.form['emplacement']
+            try:
+                titre = request.form['titre']
+                auteur = request.form['auteur']
+                annee_publication = request.form['annee_publication']
+                genre = request.form['genre']
+                isbn = request.form['isbn']
+                quantite = request.form['quantite']
+                emplacement = request.form['emplacement']
 
-            # Ajouter le livre dans la base de données
-            cursor.execute("INSERT INTO Books (titre, auteur) VALUES (?, ?)", (titre, auteur))
-            livre_id = cursor.lastrowid  # Récupère l'ID du livre ajouté
-            cursor.execute("INSERT INTO Stocks (livre_id, quantite, emplacement) VALUES (?, ?, ?)", (livre_id, quantite, emplacement))
-            
-            conn.commit()
-            flash("📚 Livre ajouté avec succès !", "success")
+                print(f"📌 Ajout du livre : {titre} | {auteur} | {annee_publication} | {genre} | {isbn} | {quantite} | {emplacement}")
 
-        # Suppression d'un livre
+                # Vérifier si le livre existe déjà (par ISBN)
+                cursor.execute("SELECT id FROM Books WHERE isbn = ?", (isbn,))
+                existing_book = cursor.fetchone()
+
+                if existing_book:
+                    livre_id = existing_book[0]
+                    print("🔄 Livre déjà existant, mise à jour du stock...")
+                else:
+                    # Ajouter le livre dans la table Books
+                    cursor.execute("INSERT INTO Books (titre, auteur, annee_publication, genre, isbn) VALUES (?, ?, ?, ?, ?)",
+                                   (titre, auteur, annee_publication, genre, isbn))
+                    livre_id = cursor.lastrowid
+                    print(f"✅ Livre ajouté avec ID {livre_id}")
+
+                # Ajouter ou mettre à jour le stock
+                cursor.execute("SELECT id FROM Stocks WHERE livre_id = ?", (livre_id,))
+                existing_stock = cursor.fetchone()
+
+                if existing_stock:
+                    cursor.execute("UPDATE Stocks SET quantite = quantite + ? WHERE livre_id = ?", (quantite, livre_id))
+                    print("🔄 Stock mis à jour")
+                else:
+                    cursor.execute("INSERT INTO Stocks (livre_id, quantite, emplacement) VALUES (?, ?, ?)",
+                                   (livre_id, quantite, emplacement))
+                    print("✅ Stock ajouté")
+
+                conn.commit()
+                flash("📚 Livre ajouté ou mis à jour dans le stock !", "success")
+
+            except Exception as e:
+                print(f"⚠️ ERREUR : {e}")
+                flash(f"Erreur lors de l'ajout : {e}", "danger")
+
         elif action == "Supprimer":
-            livre_id = request.form['livre_id']
-            cursor.execute("DELETE FROM Stocks WHERE livre_id = ?", (livre_id,))
-            cursor.execute("DELETE FROM Books WHERE id = ?", (livre_id,))
-            conn.commit()
-            flash("❌ Livre supprimé avec succès !", "danger")
+            try:
+                livre_id = request.form['livre_id']
+                cursor.execute("DELETE FROM Stocks WHERE livre_id = ?", (livre_id,))
+                cursor.execute("DELETE FROM Books WHERE id = ?", (livre_id,))
+                conn.commit()
+                flash("❌ Livre supprimé avec succès !", "danger")
+            except Exception as e:
+                print(f"⚠️ ERREUR lors de la suppression : {e}")
+                flash(f"Erreur lors de la suppression : {e}", "danger")
 
-    # Récupérer les livres
+    # Récupérer la liste des livres avec leurs stocks
     cursor.execute('''
-        SELECT Books.id, Books.titre, Books.auteur, Stocks.quantite, Stocks.emplacement
+        SELECT Books.id, Books.titre, Books.auteur, Books.annee_publication, Books.genre, Books.isbn,
+               Stocks.quantite, Stocks.emplacement
         FROM Books
         JOIN Stocks ON Books.id = Stocks.livre_id
         ORDER BY Books.titre ASC;
@@ -47,6 +80,7 @@ def afficher_stock():
     conn.close()
 
     return render_template('stock.html', stock=stock_data)
+
 
 
 
