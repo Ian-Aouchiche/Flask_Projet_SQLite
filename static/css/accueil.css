@@ -1,0 +1,46 @@
+/* Appliquer l'image de fond uniquement sur la page d'accueil */
+body.accueil {
+    background: url("/static/images/image.jpg") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Vérification du conteneur */
+.container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Vérifier si l’overlay est bien appliqué */
+.overlay {
+    background: rgba(0, 0, 0, 0.5); /* Assombrit légèrement l'image */
+    padding: 50px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 3;
+}
+
+/* Barre de navigation */
+.navbar {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titres */
+h1 {
+    color: #ffffff;
+    font-size: 2.5rem;
+}
+
+p.lead {
+    font-size: 1.2rem;
+    color: #f8f9fa;
+}
